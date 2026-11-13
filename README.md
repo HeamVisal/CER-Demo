@@ -19,6 +19,7 @@ Then visit <http://localhost:8000>.
 ## What visitors can do
 
 - Compare a reference and prediction, with up to 2,000 Unicode code points each.
+- Update the score, error counts, and alignment automatically while typing or pasting.
 - See CER, substitutions, deletions, insertions, and a minimum-edit alignment.
 - Try examples including Khmer, CER over 100%, and a one-digit factual error.
 - Download their current result as JSON.

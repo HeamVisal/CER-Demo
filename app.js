@@ -32,14 +32,10 @@ function updateLengths() {
   }
 }
 
-function markStale() {
-  updateLengths();
-  panel.classList.add('is-stale');
-  byId('result-status').textContent = 'Text changed. Calculate again to update the result.';
-  byId('download-button').disabled = true;
-  byId('error-message').hidden = true;
+function handleInput() {
   activeExample = null;
   exampleButtons.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+  calculate();
 }
 
 function renderAlignment(result) {
@@ -88,15 +84,26 @@ function calculate() {
       : 'S = replaced, D = missing, I = added. CER = (S + D + I) ÷ reference characters. Matching characters add no errors.';
     byId('result-status').textContent = activeExample
       ? `Showing the “${examples[activeExample].title}” example.`
-      : 'Calculated from your current text. Nothing was sent to a server.';
+      : 'Updates as you type. Nothing is sent to a server.';
     byId('download-button').disabled = false;
     byId('error-message').hidden = true;
     panel.classList.remove('is-stale');
   } catch (error) {
+    // An invalid input has no current score; do not leave an old result visible.
+    latestResult = null;
+    byId('score').textContent = '—';
+    byId('result-tag').textContent = 'No result';
+    byId('result-description').textContent = 'Enter valid text to see the live result.';
+    byId('formula-numerator').textContent = 'S + D + I';
+    byId('formula-denominator').textContent = 'N';
+    byId('formula-result').textContent = '—';
+    for (const count of ['substitutions', 'deletions', 'insertions']) byId(count).textContent = '—';
+    byId('alignment').replaceChildren();
+    byId('example-explanation').textContent = 'CER needs at least one reference character. An empty prediction is allowed.';
     byId('error-message').textContent = error.message;
     byId('error-message').hidden = false;
     panel.classList.add('is-stale');
-    byId('result-status').textContent = 'Result not updated. Check the message below the text boxes.';
+    byId('result-status').textContent = 'Check the message below the text boxes. Results update automatically when the input is valid.';
     byId('download-button').disabled = true;
     referenceInput.setAttribute('aria-invalid', String(Array.from(referenceInput.value).length === 0 || Array.from(referenceInput.value).length > CER.MAX_CHARACTERS));
     predictionInput.setAttribute('aria-invalid', String(Array.from(predictionInput.value).length > CER.MAX_CHARACTERS));
@@ -115,8 +122,8 @@ function loadExample(key) {
 }
 
 byId('compare-form').addEventListener('submit', (event) => { event.preventDefault(); calculate(); });
-referenceInput.addEventListener('input', markStale);
-predictionInput.addEventListener('input', markStale);
+referenceInput.addEventListener('input', handleInput);
+predictionInput.addEventListener('input', handleInput);
 exampleButtons.forEach((button) => button.addEventListener('click', () => loadExample(button.dataset.example)));
 document.querySelector('[data-load-fact]').addEventListener('click', () => {
   loadExample('fact');
@@ -126,7 +133,7 @@ document.querySelector('[data-load-fact]').addEventListener('click', () => {
 byId('clear-button').addEventListener('click', () => {
   referenceInput.value = '';
   predictionInput.value = '';
-  markStale();
+  handleInput();
   referenceInput.focus();
 });
 byId('download-button').addEventListener('click', () => {

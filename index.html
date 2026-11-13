@@ -30,13 +30,13 @@
 
       <section id="calculator" class="calculator" aria-labelledby="calculator-title">
         <div class="workspace">
-          <div class="section-heading"><div><span class="step-label">01 / THE TEXT</span><h2 id="calculator-title">Put two texts side by side.</h2></div><span class="local-badge">Runs in your browser</span></div>
+          <div class="section-heading"><div><span class="step-label">01 / THE TEXT</span><h2 id="calculator-title">Put two texts side by side.</h2></div><span class="local-badge">Live · in your browser</span></div>
           <form id="compare-form" novalidate>
             <div class="input-grid">
               <div class="input-field"><label for="reference">Reference <span>The text you expect</span></label><textarea id="reference" rows="6" spellcheck="false" aria-describedby="reference-count text-rules">plant</textarea><div class="field-footer"><span>Expected text</span><span id="reference-count">5 characters</span></div></div>
               <div class="input-field"><label for="prediction">Prediction <span>The text you want to check</span></label><textarea id="prediction" rows="6" spellcheck="false" aria-describedby="prediction-count text-rules">blat</textarea><div class="field-footer"><span>An empty prediction is allowed</span><span id="prediction-count">4 characters</span></div></div>
             </div>
-            <div id="text-rules" class="rules-note"><span aria-hidden="true">ⓘ</span><span>Exact text: capitals, punctuation, spaces, and line breaks all count. Up to 2,000 characters per text.</span></div>
+            <div id="text-rules" class="rules-note"><span aria-hidden="true">ⓘ</span><span>Results update as you type. Capitals, punctuation, spaces, and line breaks all count. Up to 2,000 characters per text.</span></div>
             <div class="form-actions"><button class="primary-button" type="submit">Calculate CER <span aria-hidden="true">↗</span></button><button class="text-button" id="clear-button" type="button">Clear texts</button></div>
             <p id="error-message" class="error-message" role="alert" hidden></p>
           </form>
